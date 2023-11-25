@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List App</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    
+</body>
+</html>
+
+
+<h3>To Do List App</h3>
+
+    <input type="text" id="taskInput" placeholder="Add a new task">
+    <button onclick="addTask()">Add Task</button>
+    <button onclick="updateTask()">Update Task</button>
+    <button onclick="deleteTask()">Delete Task</button>
+
+    <ul id="taskList"></ul>
+
+    <script>
+        // Check if there are tasks in local storage and load them
+        document.addEventListener("DOMContentLoaded", function () {
+            loadTasks();
+        });
+
+        function addTask() {
+            var taskInput = document.getElementById("taskInput");
+            var taskList = document.getElementById("taskList");
+
+            if (taskInput.value.trim() === "") {
+                alert("Please enter a task");
+                return;
+            }
+
+            // Create a new task item
+            var li = document.createElement("li");
+            li.textContent = taskInput.value;
+
+            // Add the task to the list
+            taskList.appendChild(li);
+
+            // Save tasks to local storage
+            saveTasks();
+
+            // Clear the input field
+            taskInput.value = "";
+        }
+
+
+        function updateTask() {
+            // For simplicity, updating a task in this example is considered the same as adding a new task
+            addTask();
+        }
+
+        function deleteTask() {
+            var taskList = document.getElementById("taskList");
+            
+            if (taskList.children.length === 0) {
+                alert("No tasks to delete");
+                return;
+            }
+
+            // Remove the last task from the list
+            taskList.removeChild(taskList.lastElementChild);
+
+            // Save tasks to local storage
+            saveTasks();
+        }
+
+        function saveTasks() {
+            var taskList = document.getElementById("taskList");
+            var tasks = [];
+
+            // Get all tasks from the list
+            for (var i = 0; i < taskList.children.length; i++) {
+                tasks.push(taskList.children[i].textContent);
+            }
+
+            // Save tasks to local storage
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+        }
+
+        function loadTasks() {
+            var taskList = document.getElementById("taskList");
+            var tasks = localStorage.getItem("tasks");
+
+            if (tasks) {
+                tasks = JSON.parse(tasks);
+
+                // Add tasks to the list
+                for (var i = 0; i < tasks.length; i++) {
+                    var li = document.createElement("li");
+                    li.textContent = tasks[i];
+
+                    taskList.appendChild(li);
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>
